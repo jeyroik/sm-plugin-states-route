@@ -112,6 +112,22 @@ class StatesRoute extends Extension implements IStatesRoute
     }
 
     /**
+     * @return string
+     */
+    public function getCurrentFrom(): string
+    {
+        return $this->currentFrom;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentTo()
+    {
+        return $this->currentTo;
+    }
+
+    /**
      * @param $config
      */
     protected function setConfig($config)
