@@ -27,6 +27,15 @@ class StatesRoute extends Extension implements IStatesRoute
     protected $currentFrom = '';
     protected $currentTo = '';
 
+    protected $methods = [
+        'from' => IStatesRoute::class,
+        'to' => IStatesRoute::class,
+        'getRoute' => IStatesRoute::class,
+        'setRoute' => IStatesRoute::class,
+        'getCurrentFrom' => IStatesRoute::class,
+        'getCurrentTo' => IStatesRoute::class
+    ];
+
     /**
      * StatesRoute constructor.
      *
