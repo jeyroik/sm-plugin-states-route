@@ -2,6 +2,7 @@
 namespace tratabor\interfaces\systems\states;
 
 use tratabor\interfaces\systems\IExtendable;
+use tratabor\interfaces\systems\IExtension;
 use tratabor\interfaces\systems\IPluginsAcceptable;
 
 /**
