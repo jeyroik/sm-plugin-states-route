@@ -62,7 +62,7 @@ class StatesRoute extends Extension implements IStatesRoute
          */
         $pluginRepo = SystemContainer::getItem(IPluginRepository::class);
 
-        foreach ($pluginRepo::getPluginsForStage(static::class, static::STAGE__FROM) as $plugin) {
+        foreach ($pluginRepo::getPluginsForStage(IStatesRoute::class, static::STAGE__FROM) as $plugin) {
             $stateId = $plugin($this, $stateId);
         }
 
@@ -83,7 +83,7 @@ class StatesRoute extends Extension implements IStatesRoute
          */
         $pluginRepo = SystemContainer::getItem(IPluginRepository::class);
 
-        foreach ($pluginRepo::getPluginsForStage(static::class, static::STAGE__TO) as $plugin) {
+        foreach ($pluginRepo::getPluginsForStage(IStatesRoute::class, static::STAGE__TO) as $plugin) {
             $stateId = $plugin($this, $stateId);
         }
 
