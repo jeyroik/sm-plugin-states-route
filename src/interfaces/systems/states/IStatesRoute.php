@@ -1,14 +1,14 @@
 <?php
-namespace tratabor\interfaces\systems\states;
+namespace jeyroik\extas\interfaces\systems\states;
 
-use tratabor\interfaces\systems\IExtendable;
-use tratabor\interfaces\systems\IExtension;
-use tratabor\interfaces\systems\IPluginsAcceptable;
+use jeyroik\extas\interfaces\systems\IExtendable;
+use jeyroik\extas\interfaces\systems\IExtension;
+use jeyroik\extas\interfaces\systems\IPluginsAcceptable;
 
 /**
  * Interface IStatesRoute
  *
- * @package tratabor\interfaces\systems\states
+ * @package jeyroik\extas\interfaces\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
 interface IStatesRoute extends IExtension, IPluginsAcceptable, IExtendable

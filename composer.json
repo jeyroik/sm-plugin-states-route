@@ -3,7 +3,7 @@
   "description": "Plugin for jeyroik StateMachine. Allow to collect and show states route between each other.",
   "autoload": {
     "psr-4": {
-      "tratabor\\": "src/"
+      "jeyroik\\extas\\": "src/"
     }
   }
 }

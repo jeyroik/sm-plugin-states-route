@@ -1,16 +1,16 @@
 <?php
-namespace tratabor\components\systems\states\plugins;
+namespace jeyroik\extas\components\systems\states\plugins;
 
-use tratabor\components\systems\Plugin;
-use tratabor\interfaces\systems\states\IStateMachine;
-use tratabor\interfaces\systems\states\IStatesRoute;
-use tratabor\interfaces\systems\states\machines\plugins\IPluginBeforeStateBuild;
+use jeyroik\extas\components\systems\Plugin;
+use jeyroik\extas\interfaces\systems\states\IStateMachine;
+use jeyroik\extas\interfaces\systems\states\IStatesRoute;
+use jeyroik\extas\interfaces\systems\states\machines\plugins\IPluginBeforeStateBuild;
 
 
 /**
  * Class PluginBeforeStateBuildStatesRoute
  *
- * @package tratabor\components\systems\states\plugins
+ * @package jeyroik\extas\components\systems\states\plugins
  * @author Funcraft <me@funcraft.ru>
  */
 class PluginBeforeStateBuildStatesRoute extends Plugin implements IPluginBeforeStateBuild
