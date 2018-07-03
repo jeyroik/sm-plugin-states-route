@@ -1,12 +1,12 @@
 <?php
-namespace jeyroik\extas\components\systems\states;
+namespace jeyroik\extas\components\systems\states\extensions;
 
 use jeyroik\extas\components\systems\Extension;
 use jeyroik\extas\components\systems\extensions\TExtendable;
-use jeyroik\extas\components\systems\plugins\TPluginAcceptable;
 use jeyroik\extas\components\systems\SystemContainer;
+use jeyroik\extas\interfaces\systems\IState;
 use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
-use jeyroik\extas\interfaces\systems\states\IStatesRoute;
+use jeyroik\extas\interfaces\systems\states\extensions\IStatesRoute;
 
 /**
  * Class StatesRoute
@@ -14,9 +14,8 @@ use jeyroik\extas\interfaces\systems\states\IStatesRoute;
  * @package jeyroik\extas\components\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
-class StatesRoute extends Extension implements IStatesRoute
+class ExtensionStatesRoute extends Extension implements IStatesRoute
 {
-    use TPluginAcceptable;
     use TExtendable;
 
     /**
@@ -27,7 +26,8 @@ class StatesRoute extends Extension implements IStatesRoute
     protected $currentFrom = '';
     protected $currentTo = '';
 
-    protected $methods = [
+    public $subject = IState::SUBJECT;
+    public $methods = [
         'from' => IStatesRoute::class,
         'to' => IStatesRoute::class,
         'getRoute' => IStatesRoute::class,
@@ -35,16 +35,6 @@ class StatesRoute extends Extension implements IStatesRoute
         'getCurrentFrom' => IStatesRoute::class,
         'getCurrentTo' => IStatesRoute::class
     ];
-
-    /**
-     * StatesRoute constructor.
-     *
-     * @param $config
-     */
-    public function __construct($config)
-    {
-        $this->setConfig($config);
-    }
 
     /**
      * @param $stateId
@@ -145,5 +135,13 @@ class StatesRoute extends Extension implements IStatesRoute
             $this->config = $config;
             $this->registerPlugins($config);
         }
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSubjectForExtension(): string
+    {
+        return IStatesRoute::class;
     }
 }

@@ -1,0 +1,22 @@
+{
+  "title": "Route from start",
+  "schema": "1.0",
+  "plugins": [
+    {
+      "class": "jeyroik\\extas\\components\\systems\\states\\plugins\\PluginStateBuildBeforeStatesRoute",
+      "stage": "state.build.before"
+    },
+    {
+      "class": "jeyroik\\extas\\components\\systems\\states\\plugins\\PluginStateBuildBeforeStatesRoute",
+      "stage": "state.build.before"
+    }
+  ],
+  "extensions": [
+    {
+      "class": "jeyroik\\extas\\components\\systems\\states\\extensions\\ExtensionStatesRoute",
+      "interface": "jeyroik\\extas\\interfaces\\systems\\states\\extensions\\IStatesRoute",
+      "subject": "jeyroik\\extas\\interfaces\\systems\\states\\IStateMachine",
+      "methods": ["from", "to", "getRoute", "setRoute", "getCurrentFrom", "getCurrentTo"]
+    }
+  ]
+}

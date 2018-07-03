@@ -1,5 +1,5 @@
 <?php
-namespace jeyroik\extas\interfaces\systems\states;
+namespace jeyroik\extas\interfaces\systems\states\extensions;
 
 use jeyroik\extas\interfaces\systems\IExtendable;
 use jeyroik\extas\interfaces\systems\IExtension;
@@ -11,10 +11,10 @@ use jeyroik\extas\interfaces\systems\IPluginsAcceptable;
  * @package jeyroik\extas\interfaces\systems\states
  * @author Funcraft <me@funcraft.ru>
  */
-interface IStatesRoute extends IExtension, IPluginsAcceptable, IExtendable
+interface IStatesRoute extends IExtension
 {
-    const STAGE__FROM = 'from';
-    const STAGE__TO = 'to';
+    const STAGE__FROM = 'route.from';
+    const STAGE__TO = 'route.to';
 
     /**
      * @param $stateId
