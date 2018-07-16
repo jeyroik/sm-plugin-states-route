@@ -1,17 +1,18 @@
 <?php
-namespace jeyroik\extas\components\systems\states\extensions;
+namespace jeyroik\extas\components\systems\states\machines\extensions;
 
 use jeyroik\extas\components\systems\Extension;
 use jeyroik\extas\components\systems\extensions\TExtendable;
 use jeyroik\extas\components\systems\SystemContainer;
-use jeyroik\extas\interfaces\systems\IState;
+use jeyroik\extas\interfaces\systems\IPlugin;
 use jeyroik\extas\interfaces\systems\plugins\IPluginRepository;
-use jeyroik\extas\interfaces\systems\states\extensions\IStatesRoute;
+use jeyroik\extas\interfaces\systems\states\machines\extensions\IStatesRoute;
+use jeyroik\extas\interfaces\systems\states\IStateMachine;
 
 /**
  * Class StatesRoute
  *
- * @package jeyroik\extas\components\systems\states
+ * @package jeyroik\extas\components\systems\states\machines
  * @author Funcraft <me@funcraft.ru>
  */
 class ExtensionStatesRoute extends Extension implements IStatesRoute
@@ -26,7 +27,7 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
     protected $currentFrom = '';
     protected $currentTo = '';
 
-    public $subject = IState::SUBJECT;
+    public $subject = IStateMachine::SUBJECT;
     public $methods = [
         'from' => IStatesRoute::class,
         'to' => IStatesRoute::class,
@@ -47,12 +48,7 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
             $this->route[$stateId] = [];
         }
 
-        /**
-         * @var $pluginRepo IPluginRepository
-         */
-        $pluginRepo = SystemContainer::getItem(IPluginRepository::class);
-
-        foreach ($pluginRepo::getPluginsForStage(IStatesRoute::class, static::STAGE__FROM) as $plugin) {
+        foreach ($this->getPluginsByStage(static::STAGE__FROM) as $plugin) {
             $stateId = $plugin($this, $stateId);
         }
 
@@ -68,12 +64,7 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
      */
     public function to($stateId): IStatesRoute
     {
-        /**
-         * @var $pluginRepo IPluginRepository
-         */
-        $pluginRepo = SystemContainer::getItem(IPluginRepository::class);
-
-        foreach ($pluginRepo::getPluginsForStage(IStatesRoute::class, static::STAGE__TO) as $plugin) {
+        foreach ($this->getPluginsByStage(static::STAGE__TO) as $plugin) {
             $stateId = $plugin($this, $stateId);
         }
 
@@ -128,13 +119,14 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
 
     /**
      * @param $config
+     *
+     * @return $this
      */
     protected function setConfig($config)
     {
-        if ($config) {
-            $this->config = $config;
-            $this->registerPlugins($config);
-        }
+        $config && $this->config = $config;
+
+        return $this;
     }
 
     /**
@@ -142,6 +134,6 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
      */
     protected function getSubjectForExtension(): string
     {
-        return IStatesRoute::class;
+        return IStatesRoute::SUBJECT;
     }
 }
