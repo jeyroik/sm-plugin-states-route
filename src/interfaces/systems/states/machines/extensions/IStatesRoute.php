@@ -21,8 +21,6 @@ use jeyroik\extas\interfaces\systems\IExtension;
  */
 interface IStatesRoute extends IExtension
 {
-    const SUBJECT = 'states.route';
-
     const STAGE__FROM = 'route.from';
     const STAGE__TO = 'route.to';
 
