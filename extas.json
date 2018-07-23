@@ -12,7 +12,7 @@
     {
       "class": "jeyroik\\extas\\components\\systems\\states\\machines\\extensions\\ExtensionStatesRoute",
       "interface": "jeyroik\\extas\\interfaces\\systems\\states\\machines\\extensions\\IStatesRoute",
-      "subject": "state",
+      "subject": "machine",
       "methods": [
         "from",
         "to",
