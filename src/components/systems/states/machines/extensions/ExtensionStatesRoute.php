@@ -41,8 +41,10 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
     {
         $this->extractFromMachine($machine);
 
-        if (!isset($this[static::FIELD__ROUTE][$stateId])) {
-            $this[static::FIELD__ROUTE][$stateId] = [];
+        $route = $this[static::FIELD__ROUTE];
+
+        if (!isset($route[$stateId])) {
+            $route[$stateId] = [];
         }
 
         foreach ($this->getPluginsByStage(static::STAGE__FROM) as $plugin) {
@@ -50,6 +52,8 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
         }
 
         $this[static::FIELD__CURRENT_FROM] = $stateId;
+        $this[static::FIELD__ROUTE] = $route;
+
         $this->packToMachine($machine);
 
         return $this;
@@ -69,7 +73,10 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
             $stateId = $plugin($this, $stateId);
         }
 
-        $this[static::FIELD__ROUTE][$this[static::FIELD__CURRENT_FROM]][] = $stateId;
+        $route = $this[static::FIELD__ROUTE];
+
+        $route[$this[static::FIELD__CURRENT_FROM]][] = $stateId;
+        $this[static::FIELD__ROUTE] = $route;
         $this[static::FIELD__CURRENT_TO] = $stateId;
 
         $this->packToMachine($machine);
