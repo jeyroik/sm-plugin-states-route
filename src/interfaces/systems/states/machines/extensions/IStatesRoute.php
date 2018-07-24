@@ -2,6 +2,7 @@
 namespace jeyroik\extas\interfaces\systems\states\machines\extensions;
 
 use jeyroik\extas\interfaces\systems\IExtension;
+use jeyroik\extas\interfaces\systems\states\IStateMachine;
 
 /**
  * Interface IStatesRoute

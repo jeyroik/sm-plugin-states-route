@@ -20,9 +20,6 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
      * @var array
      */
     protected $config = [];
-    protected $route = [];
-    protected $currentFrom = '';
-    protected $currentTo = '';
 
     public $subject = IStateMachine::SUBJECT;
     public $methods = [
@@ -44,15 +41,15 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
     {
         $this->extractFromMachine($machine);
 
-        if (!isset($this->route[$stateId])) {
-            $this->route[$stateId] = [];
+        if (!isset($this[static::FIELD__ROUTE][$stateId])) {
+            $this[static::FIELD__ROUTE][$stateId] = [];
         }
 
         foreach ($this->getPluginsByStage(static::STAGE__FROM) as $plugin) {
             $stateId = $plugin($this, $stateId);
         }
 
-        $this->currentFrom = $stateId;
+        $this[static::FIELD__CURRENT_FROM] = $stateId;
         $this->packToMachine($machine);
 
         return $this;
@@ -72,8 +69,8 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
             $stateId = $plugin($this, $stateId);
         }
 
-        $this->route[$this->currentFrom][] = $stateId;
-        $this->currentTo = $stateId;
+        $this[static::FIELD__ROUTE][$this[static::FIELD__CURRENT_FROM]][] = $stateId;
+        $this[static::FIELD__CURRENT_TO] = $stateId;
 
         $this->packToMachine($machine);
 
@@ -87,7 +84,9 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
      */
     public function getRoute(IStateMachine $machine = null)
     {
-        return $this->route;
+        $this->extractFromMachine($machine);
+
+        return $this[static::FIELD__ROUTE];
     }
 
     /**
@@ -100,9 +99,9 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
     public function setRoute($route, IStateMachine $machine = null)
     {
         if (is_array($route)) {
-            $this->route = $route;
+            $this[static::FIELD__ROUTE] = $route;
         } elseif (is_object($route) && ($route instanceof IStatesRoute)) {
-            $this->route = $route->getRoute();
+            $this[static::FIELD__ROUTE] = $route[static::FIELD__ROUTE];
         } else {
             throw new \Exception('Unsupported route type "' . gettype($route) . '".');
         }
@@ -113,11 +112,15 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
     }
 
     /**
+     * @param $machine
+     *
      * @return string
      */
-    public function getCurrentFrom(): string
+    public function getCurrentFrom(IStateMachine $machine = null): string
     {
-        return $this->currentFrom;
+        $this->extractFromMachine($machine);
+
+        return $this[static::FIELD__CURRENT_FROM];
     }
 
     /**
@@ -125,7 +128,9 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
      */
     public function getCurrentTo()
     {
-        return $this->currentTo;
+        $this->extractFromMachine($machine);
+
+        return $this[static::FIELD__CURRENT_TO];
     }
 
     /**
@@ -143,9 +148,9 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
             ];
         }
 
-        $this->route = $machine[IStatesRoute::class][static::FIELD__ROUTE];
-        $this->currentFrom = $machine[IStatesRoute::class][static::FIELD__CURRENT_FROM];
-        $this->currentTo = $machine[IStatesRoute::class][static::FIELD__CURRENT_TO];
+        $this[static::FIELD__ROUTE] = $machine[IStatesRoute::class][static::FIELD__ROUTE];
+        $this[static::FIELD__CURRENT_FROM] = $machine[IStatesRoute::class][static::FIELD__CURRENT_FROM];
+        $this[static::FIELD__CURRENT_TO] = $machine[IStatesRoute::class][static::FIELD__CURRENT_TO];
 
         return $this;
     }
@@ -158,9 +163,9 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
     protected function packToMachine(IStateMachine &$machine)
     {
         $machine[IStatesRoute::class] = [
-            static::FIELD__ROUTE => $this->route,
-            static::FIELD__CURRENT_FROM => $this->currentFrom,
-            static::FIELD__CURRENT_TO => $this->currentTo
+            static::FIELD__ROUTE => $this[static::FIELD__ROUTE],
+            static::FIELD__CURRENT_FROM => $this[static::FIELD__CURRENT_FROM],
+            static::FIELD__CURRENT_TO => $this[static::FIELD__CURRENT_TO]
         ];
 
         return $this;
