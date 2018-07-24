@@ -31,7 +31,8 @@ class PluginStateBuildBeforeStatesRoute extends Plugin implements IPluginStateBu
             /**
              * @var $machine IStatesRoute
              */
-            $machine->from($fromStateId)->to($stateId);
+            $machine->from($fromStateId);
+            $machine->to($stateId);
         }
 
         return [$stateConfig, $fromStateId, $stateId];

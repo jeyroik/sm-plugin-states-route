@@ -81,9 +81,11 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
     }
 
     /**
+     * @param $machine
+     *
      * @return array
      */
-    public function getRoute()
+    public function getRoute(IStateMachine $machine = null)
     {
         return $this->route;
     }
@@ -111,26 +113,18 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
     }
 
     /**
-     * @param $machine
-     *
      * @return string
      */
-    public function getCurrentFrom(IStateMachine $machine = null): string
+    public function getCurrentFrom(): string
     {
-        $this->extractFromMachine($machine);
-
         return $this->currentFrom;
     }
 
     /**
-     * @param $machine
-     *
      * @return string
      */
-    public function getCurrentTo(IStateMachine $machine = null)
+    public function getCurrentTo()
     {
-        $this->extractFromMachine($machine);
-
         return $this->currentTo;
     }
 
@@ -145,7 +139,7 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
             $machine[IStatesRoute::class] = [
                 static::FIELD__ROUTE => [],
                 static::FIELD__CURRENT_FROM => '',
-                static::STAGE__TO => null
+                static::FIELD__CURRENT_TO => null
             ];
         }
 
@@ -166,7 +160,7 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
         $machine[IStatesRoute::class] = [
             static::FIELD__ROUTE => $this->route,
             static::FIELD__CURRENT_FROM => $this->currentFrom,
-            static::STAGE__TO => $this->currentTo
+            static::FIELD__CURRENT_TO => $this->currentTo
         ];
 
         return $this;
