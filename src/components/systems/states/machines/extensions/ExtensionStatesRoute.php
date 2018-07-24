@@ -43,12 +43,12 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
 
         $route = $this[static::FIELD__ROUTE];
 
-        if (!isset($route[$stateId])) {
-            $route[$stateId] = [];
-        }
-
         foreach ($this->getPluginsByStage(static::STAGE__FROM) as $plugin) {
             $stateId = $plugin($this, $stateId);
+        }
+
+        if (!isset($route[$stateId])) {
+            $route[$stateId] = [];
         }
 
         $this[static::FIELD__CURRENT_FROM] = $stateId;
@@ -148,16 +148,14 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
     protected function extractFromMachine(IStateMachine &$machine)
     {
         if (!isset($machine[IStatesRoute::class])) {
-            $machine[IStatesRoute::class] = [
-                static::FIELD__ROUTE => [],
-                static::FIELD__CURRENT_FROM => '',
-                static::FIELD__CURRENT_TO => null
-            ];
+            $this[static::FIELD__ROUTE] = [];
+            $this[static::FIELD__CURRENT_FROM] = '';
+            $this[static::FIELD__CURRENT_TO] = null;
+
+            $machine[IStatesRoute::class] = $this->__toArray();
         }
 
-        $this[static::FIELD__ROUTE] = $machine[IStatesRoute::class][static::FIELD__ROUTE];
-        $this[static::FIELD__CURRENT_FROM] = $machine[IStatesRoute::class][static::FIELD__CURRENT_FROM];
-        $this[static::FIELD__CURRENT_TO] = $machine[IStatesRoute::class][static::FIELD__CURRENT_TO];
+        $this->setConfig($machine[IStatesRoute::class]);
 
         return $this;
     }
@@ -169,11 +167,7 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
      */
     protected function packToMachine(IStateMachine &$machine)
     {
-        $machine[IStatesRoute::class] = [
-            static::FIELD__ROUTE => $this[static::FIELD__ROUTE],
-            static::FIELD__CURRENT_FROM => $this[static::FIELD__CURRENT_FROM],
-            static::FIELD__CURRENT_TO => $this[static::FIELD__CURRENT_TO]
-        ];
+        $machine[IStatesRoute::class] = $this->__toArray();
 
         return $this;
     }
