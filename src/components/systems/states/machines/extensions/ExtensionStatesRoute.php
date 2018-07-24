@@ -36,11 +36,14 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
 
     /**
      * @param $stateId
+     * @param $machine
      *
      * @return IStatesRoute
      */
-    public function from($stateId): IStatesRoute
+    public function from($stateId, IStateMachine $machine = null): IStatesRoute
     {
+        $this->extractFromMachine($machine);
+
         if (!isset($this->route[$stateId])) {
             $this->route[$stateId] = [];
         }
@@ -50,23 +53,29 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
         }
 
         $this->currentFrom = $stateId;
+        $this->packToMachine($machine);
 
         return $this;
     }
 
     /**
      * @param $stateId
+     * @param $machine
      *
      * @return IStatesRoute
      */
-    public function to($stateId): IStatesRoute
+    public function to($stateId, IStateMachine $machine = null): IStatesRoute
     {
+        $this->extractFromMachine($machine);
+
         foreach ($this->getPluginsByStage(static::STAGE__TO) as $plugin) {
             $stateId = $plugin($this, $stateId);
         }
 
         $this->route[$this->currentFrom][] = $stateId;
         $this->currentTo = $stateId;
+
+        $this->packToMachine($machine);
 
         return $this;
     }
@@ -81,11 +90,12 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
 
     /**
      * @param array|IStatesRoute $route
+     * @param $machine
      *
      * @return $this
      * @throws \Exception
      */
-    public function setRoute($route)
+    public function setRoute($route, IStateMachine $machine = null)
     {
         if (is_array($route)) {
             $this->route = $route;
@@ -95,33 +105,69 @@ class ExtensionStatesRoute extends Extension implements IStatesRoute
             throw new \Exception('Unsupported route type "' . gettype($route) . '".');
         }
 
+        $this->packToMachine($machine);
+
         return $this;
     }
 
     /**
+     * @param $machine
+     *
      * @return string
      */
-    public function getCurrentFrom(): string
+    public function getCurrentFrom(IStateMachine $machine = null): string
     {
+        $this->extractFromMachine($machine);
+
         return $this->currentFrom;
     }
 
     /**
+     * @param $machine
+     *
      * @return string
      */
-    public function getCurrentTo()
+    public function getCurrentTo(IStateMachine $machine = null)
     {
+        $this->extractFromMachine($machine);
+
         return $this->currentTo;
     }
 
     /**
-     * @param $config
+     * @param IStateMachine $machine
      *
      * @return $this
      */
-    protected function setConfig($config)
+    protected function extractFromMachine(IStateMachine &$machine)
     {
-        $config && $this->config = $config;
+        if (!isset($machine[IStatesRoute::class])) {
+            $machine[IStatesRoute::class] = [
+                static::FIELD__ROUTE => [],
+                static::FIELD__CURRENT_FROM => '',
+                static::STAGE__TO => null
+            ];
+        }
+
+        $this->route = $machine[IStatesRoute::class][static::FIELD__ROUTE];
+        $this->currentFrom = $machine[IStatesRoute::class][static::FIELD__CURRENT_FROM];
+        $this->currentTo = $machine[IStatesRoute::class][static::FIELD__CURRENT_TO];
+
+        return $this;
+    }
+
+    /**
+     * @param IStateMachine $machine
+     *
+     * @return $this
+     */
+    protected function packToMachine(IStateMachine &$machine)
+    {
+        $machine[IStatesRoute::class] = [
+            static::FIELD__ROUTE => $this->route,
+            static::FIELD__CURRENT_FROM => $this->currentFrom,
+            static::STAGE__TO => $this->currentTo
+        ];
 
         return $this;
     }

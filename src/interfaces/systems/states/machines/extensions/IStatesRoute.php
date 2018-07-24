@@ -24,6 +24,10 @@ interface IStatesRoute extends IExtension
     const STAGE__FROM = 'route.from';
     const STAGE__TO = 'route.to';
 
+    const FIELD__CURRENT_FROM = 'current.from';
+    const FIELD__CURRENT_TO = 'current.to';
+    const FIELD__ROUTE = 'route';
+
     /**
      * @param $stateId
      *
